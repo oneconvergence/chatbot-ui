@@ -14,7 +14,8 @@ export const onAddModelForComparison = (chatId:string) => {
     const id = uuidv4()
     chatIds.push(id);
     localStorage.setItem('chats', JSON.stringify(chatIds));
-    const selectedChat = JSON.parse(localStorage.getItem('selectedConversation-'+chatId))
+    const selConv = localStorage.getItem('selectedConversation-'+chatId)
+    const selectedChat = selConv && JSON.parse(selConv)
     const newChat = {
       id: uuidv4(),
       name: 'New Conversation',

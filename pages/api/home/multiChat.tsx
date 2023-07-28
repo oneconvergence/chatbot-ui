@@ -11,8 +11,28 @@ export interface Props {
     defaultModelId: OpenAIModelID;
     chatId: string
   }
-  
-const MultiChatContext = createContext({});
+  // Define the type for your shared input text and sync chat submit function
+type SharedInputText = string;
+
+type SyncChatSubmit = () => void;
+
+// Create the interface for the context value
+interface MultiChatContextValue {
+  sharedInputText: SharedInputText;
+  updateSharedInputText: (text: SharedInputText) => void;
+  syncChatSubmit: boolean;
+  updateSyncChatSubmit: (submitFunction: boolean) => void;
+}
+
+// Create a default context value
+const defaultMultiChatContextValue: MultiChatContextValue = {
+  sharedInputText: '',
+  updateSharedInputText: () => {},
+  syncChatSubmit: false,
+  updateSyncChatSubmit: () => {},
+};
+
+const MultiChatContext = createContext(defaultMultiChatContextValue);
 
 const MultiChat = () => {
   const [chats, setChats] = useState<string[]>([]);

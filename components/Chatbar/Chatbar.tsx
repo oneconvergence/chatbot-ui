@@ -144,7 +144,7 @@ export const Chatbar = () => {
 
     homeDispatch({ field: 'conversations', value: updatedConversations });
     chatDispatch({ field: 'searchTerm', value: '' });
-    saveConversations(updatedConversations);
+    saveConversations(updatedConversations, '');
 
     if (updatedConversations.length > 0) {
       homeDispatch({
@@ -152,7 +152,7 @@ export const Chatbar = () => {
         value: updatedConversations[updatedConversations.length - 1],
       });
 
-      saveConversation(updatedConversations[updatedConversations.length - 1]);
+      saveConversation(updatedConversations[updatedConversations.length - 1],'');
     } else {
       defaultModelId &&
         homeDispatch({

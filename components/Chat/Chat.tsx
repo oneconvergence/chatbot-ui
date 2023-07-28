@@ -403,9 +403,9 @@ export const Chat = memo(({ stopConversationRef, chatId }: Props) => {
             ref={chatContainerRef}
             onScroll={handleScroll}
           >
-            {selectedConversation?.messages.length === 0 && false ? (
+            {selectedConversation?.messages.length === 0 ? (
               <>
-                <div className="mx-auto flex flex-col space-y-5 md:space-y-10 px-3 pt-5 md:pt-12 sm:max-w-[600px]">
+                {/* <div className="mx-auto flex flex-col space-y-5 md:space-y-10 px-3 pt-5 md:pt-12 sm:max-w-[600px]">
                   <div className="text-center text-3xl font-semibold text-gray-800 dark:text-gray-100">
                     {models.length === 0 ? (
                       <div>
@@ -442,7 +442,7 @@ export const Chat = memo(({ stopConversationRef, chatId }: Props) => {
                       />
                     </div>
                   )}
-                </div>
+                </div> */}
               </>
             ) : (
               <>
@@ -500,7 +500,7 @@ export const Chat = memo(({ stopConversationRef, chatId }: Props) => {
                     <TemperatureSlider
                         label={t('Temperature')}
                         onChangeTemperature={(temperature) =>
-                          handleUpdateConversation(selectedConversation, {
+                          handleUpdateConversation(selectedConversation!, {
                             key: 'temperature',
                             value: temperature,
                           })
