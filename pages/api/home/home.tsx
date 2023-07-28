@@ -45,12 +45,14 @@ interface Props {
   serverSideApiKeyIsSet: boolean;
   serverSidePluginKeysSet: boolean;
   defaultModelId: OpenAIModelID;
+  chatId: string;
 }
 
 const Home = ({
   serverSideApiKeyIsSet,
   serverSidePluginKeysSet,
   defaultModelId,
+  chatId
 }: Props) => {
   const { t } = useTranslation('chat');
   const { getModels } = useApiService();
@@ -107,7 +109,7 @@ const Home = ({
       value: conversation,
     });
 
-    saveConversation(conversation);
+    saveConversation(conversation, chatId);
   };
 
   // FOLDER OPERATIONS  --------------------------------------------
@@ -142,7 +144,7 @@ const Home = ({
     });
 
     dispatch({ field: 'conversations', value: updatedConversations });
-    saveConversations(updatedConversations);
+    saveConversations(updatedConversations, chatId);
 
     const updatedPrompts: Prompt[] = prompts.map((p) => {
       if (p.folderId === folderId) {
@@ -201,8 +203,8 @@ const Home = ({
     dispatch({ field: 'selectedConversation', value: newConversation });
     dispatch({ field: 'conversations', value: updatedConversations });
 
-    saveConversation(newConversation);
-    saveConversations(updatedConversations);
+    saveConversation(newConversation, chatId);
+    saveConversations(updatedConversations, chatId);
 
     dispatch({ field: 'loading', value: false });
   };
@@ -219,6 +221,7 @@ const Home = ({
     const { single, all } = updateConversation(
       updatedConversation,
       conversations,
+      chatId
     );
 
     dispatch({ field: 'selectedConversation', value: single });
@@ -302,7 +305,7 @@ const Home = ({
       dispatch({ field: 'prompts', value: JSON.parse(prompts) });
     }
 
-    const conversationHistory = localStorage.getItem('conversationHistory');
+    const conversationHistory = localStorage.getItem('conversationHistory-'+chatId);
     if (conversationHistory) {
       const parsedConversationHistory: Conversation[] =
         JSON.parse(conversationHistory);
@@ -313,7 +316,7 @@ const Home = ({
       dispatch({ field: 'conversations', value: cleanedConversationHistory });
     }
 
-    const selectedConversation = localStorage.getItem('selectedConversation');
+    const selectedConversation = localStorage.getItem('selectedConversation-'+chatId);
     if (selectedConversation) {
       const parsedSelectedConversation: Conversation =
         JSON.parse(selectedConversation);
@@ -360,7 +363,7 @@ const Home = ({
       }}
     >
       <Head>
-        <title>Chatbot UI</title>
+        <title>AI Playground</title>
         <meta name="description" content="ChatGPT but better." />
         <meta
           name="viewport"
@@ -370,7 +373,7 @@ const Home = ({
       </Head>
       {selectedConversation && (
         <main
-          className={`flex h-screen w-screen flex-col text-sm text-white dark:text-white ${lightMode}`}
+          className={`flex h-[calc(100vh-56px)] w-screen flex-col text-sm text-white dark:text-white ${lightMode} @container min-w-[280px]`}
         >
           <div className="fixed top-0 w-full sm:hidden">
             <Navbar
@@ -379,14 +382,14 @@ const Home = ({
             />
           </div>
 
-          <div className="flex h-full w-full pt-[48px] sm:pt-0">
-            <Chatbar />
+          <div className="flex h-[calc(100vh-56px)] w-full pt-[48px] sm:pt-0">
+            {/* <Chatbar /> */}
 
             <div className="flex flex-1">
-              <Chat stopConversationRef={stopConversationRef} />
+              <Chat stopConversationRef={stopConversationRef} chatId={chatId}/>
             </div>
 
-            <Promptbar />
+            {/* <Promptbar /> */}
           </div>
         </main>
       )}

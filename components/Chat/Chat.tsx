@@ -1,4 +1,5 @@
-import { IconClearAll, IconSettings } from '@tabler/icons-react';
+import { IconClearAll, IconSettings, IconCircleMinus, IconCirclePlus } from '@tabler/icons-react';
+
 import {
   MutableRefObject,
   memo,
@@ -34,12 +35,17 @@ import { SystemPrompt } from './SystemPrompt';
 import { TemperatureSlider } from './Temperature';
 import { MemoizedChatMessage } from './MemoizedChatMessage';
 
+import { useMultiChatContext } from '../../pages/api/home/multiChat';
+import {onAddModelForComparison, onRemoveModelFromComparison}  from '@/pages/api/home/utils';
+
 interface Props {
   stopConversationRef: MutableRefObject<boolean>;
+  chatId: string;
 }
 
-export const Chat = memo(({ stopConversationRef }: Props) => {
+export const Chat = memo(({ stopConversationRef, chatId }: Props) => {
   const { t } = useTranslation('chat');
+  const { updateSyncChatSubmit } =  useMultiChatContext();
 
   const {
     state: {
@@ -197,7 +203,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
               });
             }
           }
-          saveConversation(updatedConversation);
+          saveConversation(updatedConversation, chatId);
           const updatedConversations: Conversation[] = conversations.map(
             (conversation) => {
               if (conversation.id === selectedConversation.id) {
@@ -210,7 +216,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
             updatedConversations.push(updatedConversation);
           }
           homeDispatch({ field: 'conversations', value: updatedConversations });
-          saveConversations(updatedConversations);
+          saveConversations(updatedConversations, chatId);
           homeDispatch({ field: 'messageIsStreaming', value: false });
         } else {
           const { answer } = await response.json();
@@ -226,7 +232,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
             field: 'selectedConversation',
             value: updateConversation,
           });
-          saveConversation(updatedConversation);
+          saveConversation(updatedConversation, chatId);
           const updatedConversations: Conversation[] = conversations.map(
             (conversation) => {
               if (conversation.id === selectedConversation.id) {
@@ -239,10 +245,11 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
             updatedConversations.push(updatedConversation);
           }
           homeDispatch({ field: 'conversations', value: updatedConversations });
-          saveConversations(updatedConversations);
+          saveConversations(updatedConversations, chatId);
           homeDispatch({ field: 'loading', value: false });
           homeDispatch({ field: 'messageIsStreaming', value: false });
         }
+        updateSyncChatSubmit(false)
       }
     },
     [
@@ -396,7 +403,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
             ref={chatContainerRef}
             onScroll={handleScroll}
           >
-            {selectedConversation?.messages.length === 0 ? (
+            {selectedConversation?.messages.length === 0 && false ? (
               <>
                 <div className="mx-auto flex flex-col space-y-5 md:space-y-10 px-3 pt-5 md:pt-12 sm:max-w-[600px]">
                   <div className="text-center text-3xl font-semibold text-gray-800 dark:text-gray-100">
@@ -439,26 +446,66 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
               </>
             ) : (
               <>
-                <div className="sticky top-0 z-10 flex justify-center border border-b-neutral-300 bg-neutral-100 py-2 text-sm text-neutral-500 dark:border-none dark:bg-[#444654] dark:text-neutral-200">
-                  {t('Model')}: {selectedConversation?.model.name} | {t('Temp')}
-                  : {selectedConversation?.temperature} |
+                <div className="sticky top-0 z-10 flex  border-b-1 border-b-neutral-300 bg-neutral-100 p-2 text-sm text-neutral-500 dark:border-none dark:bg-[#444654] dark:text-neutral-200 bg-white shadow-[0_1px_rgba(202,206,214,.3),0_5px_10px_-5px_rgba(0,0,0,.05)]">
+                <div className='flex'><ModelSelect />
+                <p className="my-auto ml-1">
+                {t('Temp')}
+                  : {selectedConversation?.temperature} </p></div>
+                  {/* {t('Model')}: {selectedConversation?.model.name} | {t('Temp')}
+                  : {selectedConversation?.temperature} | */}
+                  <div className='flex  ml-auto'>
+                  <div className="group relative  flex justify-center">
+                  <button
+                    className="ml-2 cursor-pointer hover:opacity-50 disabled:opacity-50"
+                    onClick={onClearAll}
+                    disabled={selectedConversation?.messages.length === 0}
+                  >
+                    <IconClearAll size={18} />
+                  </button>
+                  <span className="absolute top-10 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap overflow-visible">Clear conversation</span>
+                 </div>
+                 <div className="group relative  flex justify-center">
+                  <button
+                    className="ml-2 cursor-pointer hover:opacity-50"
+                    onClick={() => onRemoveModelFromComparison(chatId)}
+                  >
+                    <IconCircleMinus size={18} />
+                  </button>
+                  <span className="absolute top-10 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap">Remove model</span>
+                 </div>
+                 <div className="group relative  flex justify-center"> 
+                  <button
+                    className="ml-2 cursor-pointer hover:opacity-50"
+                    onClick={() => onAddModelForComparison(chatId)}
+                  >
+                    <IconCirclePlus size={18} />
+                  </button>
+                  <span className="absolute top-10 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap">Add model for comparison</span>
+                 </div>
+
+                 <div className="group relative  flex justify-center">
                   <button
                     className="ml-2 cursor-pointer hover:opacity-50"
                     onClick={handleSettings}
                   >
                     <IconSettings size={18} />
                   </button>
-                  <button
-                    className="ml-2 cursor-pointer hover:opacity-50"
-                    onClick={onClearAll}
-                  >
-                    <IconClearAll size={18} />
-                  </button>
+                  <span className="absolute top-10 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap">Configure model</span>
+                 </div>
+                  </div>
                 </div>
                 {showSettings && (
                   <div className="flex flex-col space-y-10 md:mx-auto md:max-w-xl md:gap-6 md:py-3 md:pt-6 lg:max-w-2xl lg:px-0 xl:max-w-3xl">
                     <div className="flex h-full flex-col space-y-4 border-b border-neutral-200 p-4 dark:border-neutral-600 md:rounded-lg md:border">
-                      <ModelSelect />
+                    <TemperatureSlider
+                        label={t('Temperature')}
+                        onChangeTemperature={(temperature) =>
+                          handleUpdateConversation(selectedConversation, {
+                            key: 'temperature',
+                            value: temperature,
+                          })
+                        }
+                      />
                     </div>
                   </div>
                 )}
@@ -476,6 +523,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                         selectedConversation?.messages.length - index,
                       );
                     }}
+                    chatId={chatId}
                   />
                 ))}
 
@@ -503,6 +551,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
               }
             }}
             showScrollDownButton={showScrollDownButton}
+            chatId={chatId}
           />
         </>
       )}

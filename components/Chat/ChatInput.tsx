@@ -28,6 +28,12 @@ import { PluginSelect } from './PluginSelect';
 import { PromptList } from './PromptList';
 import { VariableModal } from './VariableModal';
 
+import { useMultiChatContext } from '../../pages/api/home/multiChat';
+import {
+  getSyncChat,
+  saveSyncChat
+} from '@/pages/api/home/utils';
+
 interface Props {
   onSend: (message: Message, plugin: Plugin | null) => void;
   onRegenerate: () => void;
@@ -35,6 +41,7 @@ interface Props {
   stopConversationRef: MutableRefObject<boolean>;
   textareaRef: MutableRefObject<HTMLTextAreaElement | null>;
   showScrollDownButton: boolean;
+  chatId:string,
 }
 
 export const ChatInput = ({
@@ -44,6 +51,7 @@ export const ChatInput = ({
   stopConversationRef,
   textareaRef,
   showScrollDownButton,
+  chatId,
 }: Props) => {
   const { t } = useTranslation('chat');
 
@@ -62,12 +70,27 @@ export const ChatInput = ({
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [showPluginSelect, setShowPluginSelect] = useState(false);
   const [plugin, setPlugin] = useState<Plugin | null>(null);
+  const [syncChat, setSyncChat] = useState<boolean>(getSyncChat(chatId));
+  const {sharedInputText, updateSharedInputText,syncChatSubmit,updateSyncChatSubmit } =
+  useMultiChatContext();
 
   const promptListRef = useRef<HTMLUListElement | null>(null);
 
   const filteredPrompts = prompts.filter((prompt) =>
     prompt.name.toLowerCase().includes(promptInputValue.toLowerCase()),
   );
+  useEffect(() => {
+    // When shared input text changes, update the local inputText state
+    if(syncChat){
+      setContent(sharedInputText);
+      updatePromptListVisibility(sharedInputText);
+    }
+  }, [sharedInputText]);
+
+  useEffect(() => {
+    // When shared input text changes, update the local inputText state
+    if(syncChat && syncChatSubmit === true)handleSend();
+  }, [syncChatSubmit]);
 
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
@@ -84,6 +107,7 @@ export const ChatInput = ({
     }
 
     setContent(value);
+    if(syncChat)updateSharedInputText(value)
     updatePromptListVisibility(value);
   };
 
@@ -96,7 +120,7 @@ export const ChatInput = ({
       alert(t('Please enter a message'));
       return;
     }
-
+    if(syncChat)updateSyncChatSubmit(true)
     onSend({ role: 'user', content }, plugin);
     setContent('');
     setPlugin(null);
@@ -209,6 +233,11 @@ export const ChatInput = ({
       updatePromptListVisibility(prompt.content);
     }
   };
+
+  const handleSyncChat = () => {
+    saveSyncChat(!syncChat, chatId);
+    setSyncChat(!syncChat)
+  }
 
   const handleSubmit = (updatedVariables: string[]) => {
     const newContent = content?.replace(/{{(.*?)}}/g, (match, variable) => {
@@ -379,8 +408,9 @@ export const ChatInput = ({
           )}
         </div>
       </div>
-      <div className="px-3 pt-2 pb-3 text-center text-[12px] text-black/50 dark:text-white/50 md:px-4 md:pt-3 md:pb-6">
-        <a
+
+      <div className="px-3 pt-2 text-right text-[13px] text-black dark:text-neutral-200 md:px-4 md:pt-3">
+        {/* <a
           href="https://github.com/mckaywrigley/chatbot-ui"
           target="_blank"
           rel="noreferrer"
@@ -391,7 +421,12 @@ export const ChatInput = ({
         .{' '}
         {t(
           "Chatbot UI is an advanced chatbot kit for OpenAI's chat models aiming to mimic ChatGPT's interface and functionality.",
-        )}
+        )} */}
+
+        <label className="inline-flex items-center justify-center gap-1.5 " data-state="closed">
+          <input className="rounded w-3.5 h-3.5 text-zinc-900" type="checkbox" checked={syncChat} onChange={handleSyncChat}/>
+          <span className="text-xs font-medium select-none text-zinc-600 whitespace-nowrap">Sync Chats</span>
+        </label>
       </div>
     </div>
   );
