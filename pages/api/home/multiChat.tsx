@@ -83,7 +83,7 @@ const MultiChat = () => {
     </div>
     <div className="flex h-[calc(100vh-56px)] w-full sm:pt-0  divide-x">
       {chats.map((chat) => (
-        <Home key={chat} serverSideApiKeyIsSet={true} serverSidePluginKeysSet={true} defaultModelId={OpenAIModelID.GPT_4}  chatId={chat}/>
+        <Home key={chat} serverSideApiKeyIsSet={true} serverSidePluginKeysSet={true} defaultModelId={OpenAIModelID.GPT_3_5}  chatId={chat}/>
       ))}
     </div>
     </MultiChatContext.Provider>
