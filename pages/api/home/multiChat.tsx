@@ -2,14 +2,15 @@ import {createContext, useContext, useEffect, useState} from 'react';
 
 import Home from './home';
 import Image from 'next/image';
-import { OpenAIModelID } from '@/types/openai';
 import { v4 as uuidv4 } from 'uuid';
+import { GetServerSideProps } from 'next';
+import { OpenAIModelID, fallbackModelID } from '@/types/openai';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 export interface Props {
     serverSideApiKeyIsSet: boolean;
     serverSidePluginKeysSet: boolean;
     defaultModelId: OpenAIModelID;
-    chatId: string
   }
   // Define the type for your shared input text and sync chat submit function
 type SharedInputText = string;
@@ -34,7 +35,11 @@ const defaultMultiChatContextValue: MultiChatContextValue = {
 
 const MultiChatContext = createContext(defaultMultiChatContextValue);
 
-const MultiChat = () => {
+const MultiChat = ({
+  serverSideApiKeyIsSet,
+  serverSidePluginKeysSet,
+  defaultModelId,
+}: Props) => {
   const [chats, setChats] = useState<string[]>([]);
   const [sharedInputText, setSharedInputText] = useState('');
   const [syncChatSubmit, setSyncChatSubmit] = useState(false);
@@ -83,7 +88,7 @@ const MultiChat = () => {
     </div>
     <div className="flex h-[calc(100vh-56px)] w-full sm:pt-0  divide-x">
       {chats.map((chat) => (
-        <Home key={chat} serverSideApiKeyIsSet={true} serverSidePluginKeysSet={true} defaultModelId={OpenAIModelID.GPT_3_5}  chatId={chat}/>
+        <Home key={chat} serverSideApiKeyIsSet={serverSideApiKeyIsSet} serverSidePluginKeysSet={serverSidePluginKeysSet} defaultModelId={defaultModelId} chatId={chat}/>
       ))}
     </div>
     </MultiChatContext.Provider>
@@ -95,3 +100,37 @@ export default MultiChat;
 export function useMultiChatContext() {
   return useContext(MultiChatContext);
 }
+
+export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
+  const defaultModelId =
+    (process.env.DEFAULT_MODEL &&
+      Object.values(OpenAIModelID).includes(
+        process.env.DEFAULT_MODEL as OpenAIModelID,
+      ) &&
+      process.env.DEFAULT_MODEL) ||
+    fallbackModelID;
+
+  let serverSidePluginKeysSet = false;
+
+  const googleApiKey = process.env.GOOGLE_API_KEY;
+  const googleCSEId = process.env.GOOGLE_CSE_ID;
+
+  if (googleApiKey && googleCSEId) {
+    serverSidePluginKeysSet = true;
+  }
+  return {
+    props: {
+      serverSideApiKeyIsSet: !!process.env.OPENAI_API_KEY,
+      defaultModelId,
+      serverSidePluginKeysSet,
+      ...(await serverSideTranslations(locale ?? 'en', [
+        'common',
+        'chat',
+        'sidebar',
+        'markdown',
+        'promptbar',
+        'settings',
+      ])),
+    },
+  };
+};

@@ -1,1 +1,1 @@
-export { default } from './multiChat'
+export { default, getServerSideProps } from './multiChat'
