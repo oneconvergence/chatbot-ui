@@ -78,26 +78,26 @@ const Home = ({
 
   const stopConversationRef = useRef<boolean>(false);
 
-  const { data, error, refetch } = useQuery(
-    ['GetModels', apiKey, serverSideApiKeyIsSet],
-    ({ signal }) => {
-      if (!apiKey && !serverSideApiKeyIsSet) return null;
+  // const { data, error, refetch } = useQuery(
+  //   ['GetModels', apiKey, serverSideApiKeyIsSet],
+  //   ({ signal }) => {
+  //     if (!apiKey && !serverSideApiKeyIsSet) return null;
 
-      return getModels(
-        {
-          key: apiKey,
-        },
-        signal,
-      );
-    },
-    { enabled: true, refetchOnMount: false },
-  );
+  //     return getModels(
+  //       {
+  //         key: apiKey,
+  //       },
+  //       signal,
+  //     );
+  //   },
+  //   { enabled: true, refetchOnMount: false },
+  // );
 
   // useEffect(() => {
   //   if (data) dispatch({ field: 'models', value: data });
   // }, [data, dispatch]);
 
-  const apps = useQuery(
+  const { data, error, refetch } = useQuery(
     ['GetApps', apiKey, serverSideApiKeyIsSet],
     ({ signal }) => {
       if (!apiKey && !serverSideApiKeyIsSet) return null;
@@ -107,16 +107,17 @@ const Home = ({
   );
 
   useEffect(() => {
-    if (apps && apps.data && Array.isArray(apps.data)) {
-      const models = apps.data.map((app) => ({
-        id:app.model.id,
+    if (data && Array.isArray(data)) {
+      const models = data.map((app) => ({
+        id: app.model.id,
         name: app.name,
         appId: app.name,
-        appName: app.name
+        appName: app.name,
+        url: app.model.url,
       }))
       dispatch({ field: 'models', value: models });
     }
-  }, [apps, dispatch]);
+  }, [data, dispatch]);
 
   useEffect(() => {
     dispatch({ field: 'modelError', value: getModelsError(error) });
