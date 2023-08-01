@@ -55,7 +55,7 @@ const Home = ({
   chatId
 }: Props) => {
   const { t } = useTranslation('chat');
-  const { getModels } = useApiService();
+  const { getModels, getApps } = useApiService();
   const { getModelsError } = useErrorService();
   const [initialRender, setInitialRender] = useState<boolean>(true);
 
@@ -93,9 +93,30 @@ const Home = ({
     { enabled: true, refetchOnMount: false },
   );
 
+  // useEffect(() => {
+  //   if (data) dispatch({ field: 'models', value: data });
+  // }, [data, dispatch]);
+
+  const apps = useQuery(
+    ['GetApps', apiKey, serverSideApiKeyIsSet],
+    ({ signal }) => {
+      if (!apiKey && !serverSideApiKeyIsSet) return null;
+      return getApps(signal)
+    },
+    { enabled: true, refetchOnMount: false },
+  );
+
   useEffect(() => {
-    if (data) dispatch({ field: 'models', value: data });
-  }, [data, dispatch]);
+    if (apps && apps.data && Array.isArray(apps.data)) {
+      const models = apps.data.map((app) => ({
+        id:app.model.id,
+        name: app.name,
+        appId: app.name,
+        appName: app.name
+      }))
+      dispatch({ field: 'models', value: models });
+    }
+  }, [apps, dispatch]);
 
   useEffect(() => {
     dispatch({ field: 'modelError', value: getModelsError(error) });

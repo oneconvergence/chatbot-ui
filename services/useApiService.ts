@@ -25,6 +25,18 @@ const useApiService = () => {
   // 	[fetchService]
   // );
 
+  const getApps = useCallback(
+    (signal?: AbortSignal) => {
+      return fetchService.get(`/api/ds/apps/`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        signal,
+      });
+    },
+    [fetchService],
+  );
+
   const getModels = useCallback(
     (params: GetModelsRequestProps, signal?: AbortSignal) => {
       return fetchService.post<GetModelsRequestProps>(`/api/models`, {
@@ -40,6 +52,7 @@ const useApiService = () => {
 
   return {
     getModels,
+    getApps,
   };
 };
 
