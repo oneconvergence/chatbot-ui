@@ -9,7 +9,7 @@ import Head from 'next/head';
 import { useCreateReducer } from '@/hooks/useCreateReducer';
 
 import useErrorService from '@/services/errorService';
-import useApiService from '@/services/useApiService';
+import useApiService from '@/services/useD3xApiService';
 
 import {
   cleanConversationHistory,
@@ -55,7 +55,7 @@ const Home = ({
   chatId
 }: Props) => {
   const { t } = useTranslation('chat');
-  const { getModels, getApps } = useApiService();
+  const { getApps } = useApiService();
   const { getModelsError } = useErrorService();
   const [initialRender, setInitialRender] = useState<boolean>(true);
 
