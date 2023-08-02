@@ -109,11 +109,9 @@ const Home = ({
   useEffect(() => {
     if (data && Array.isArray(data)) {
       const models = data.map((app) => ({
-        id: 'gpt-3.5-turbo',
+        id: defaultModelId,
         name: app.name,
-        appId: app.name,
-        appName: app.name,
-        url: '/securechat/api/chat',
+        app: app.name,
       }))
       dispatch({ field: 'models', value: models });
     }

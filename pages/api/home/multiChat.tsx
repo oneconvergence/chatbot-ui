@@ -83,12 +83,12 @@ const MultiChat = ({
       value={{ sharedInputText, updateSharedInputText,syncChatSubmit,updateSyncChatSubmit }}
     >
     <div className="sticky top-0 z-10 flex  border-b-[1px] bg-white h-[56px] border-b-neutral-300 bg-neutral-100 pl-2 ">
-    <Image src="/dkube.png" alt="AI" width={40} height={36} className="my-auto"/>
+    <Image src="/chatbotui/dkube.png" alt="AI" width={40} height={36} className="my-auto"/>
     <span className="my-auto font-bold lg:text-lg pl-2">AI Playground</span>
     </div>
     <div className="flex h-[calc(100vh-56px)] w-full sm:pt-0  divide-x">
       {chats.map((chat) => (
-        <Home key={chat} serverSideApiKeyIsSet={serverSideApiKeyIsSet} serverSidePluginKeysSet={serverSidePluginKeysSet} defaultModelId={defaultModelId} chatId={chat}/>
+        <Home key={chat} serverSideApiKeyIsSet={true} serverSidePluginKeysSet={serverSidePluginKeysSet} defaultModelId={defaultModelId} chatId={chat}/>
       ))}
     </div>
     </MultiChatContext.Provider>

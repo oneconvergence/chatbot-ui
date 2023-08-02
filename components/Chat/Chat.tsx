@@ -106,7 +106,7 @@ export const Chat = memo(({ stopConversationRef, chatId }: Props) => {
           prompt: updatedConversation.prompt,
           temperature: updatedConversation.temperature,
         };
-        const endpoint = updatedConversation.model ? updatedConversation.model.url:getEndpoint(plugin);
+        const endpoint = updatedConversation.model ? `${updatedConversation.model.app}/api/chat`:getEndpoint(plugin);
         let body;
         if (!plugin) {
           body = JSON.stringify(chatBody);
