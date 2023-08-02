@@ -1,4 +1,5 @@
 import { v4 as uuidv4 } from 'uuid';
+import { OpenAIModel } from '@/types/openai';
 
 export const saveSyncChat = (syncChat: boolean, chatId: string) => {
     localStorage.setItem('syncChat-'+chatId, JSON.stringify(syncChat));
@@ -37,3 +38,12 @@ export const onAddModelForComparison = (chatId:string) => {
       window.dispatchEvent(new Event('newChat'));
     }
   }
+
+
+export const getEndpoint = (model: OpenAIModel) => {
+  if (!model || !model.app) {
+    return 'api/chat';
+  }
+
+  return `/${model.app}/api/chat`;
+};

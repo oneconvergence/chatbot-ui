@@ -13,7 +13,7 @@ import toast from 'react-hot-toast';
 
 import { useTranslation } from 'next-i18next';
 
-import { getEndpoint } from '@/utils/app/api';
+// import { getEndpoint } from '@/utils/app/api';
 import {
   saveConversation,
   saveConversations,
@@ -35,8 +35,8 @@ import { SystemPrompt } from './SystemPrompt';
 import { TemperatureSlider } from './Temperature';
 import { MemoizedChatMessage } from './MemoizedChatMessage';
 
-import { useMultiChatContext } from '../../pages/api/home/multiChat';
-import {onAddModelForComparison, onRemoveModelFromComparison}  from '@/pages/api/home/utils';
+import { useMultiChatContext } from '@/pages/api/home/multiChat';
+import {onAddModelForComparison, onRemoveModelFromComparison, getEndpoint}  from '@/pages/api/home/utils';
 
 interface Props {
   stopConversationRef: MutableRefObject<boolean>;
@@ -106,7 +106,7 @@ export const Chat = memo(({ stopConversationRef, chatId }: Props) => {
           prompt: updatedConversation.prompt,
           temperature: updatedConversation.temperature,
         };
-        const endpoint = updatedConversation.model ? `${updatedConversation.model.app}/api/chat`:getEndpoint(plugin);
+        const endpoint = getEndpoint(updatedConversation.model);
         let body;
         if (!plugin) {
           body = JSON.stringify(chatBody);
