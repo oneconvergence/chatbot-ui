@@ -26,7 +26,7 @@ import remarkMath from 'remark-math';
 export interface Props {
   message: Message;
   messageIndex: number;
-  onEdit?: (editedMessage: Message) => void,
+  onEdit?: (editedMessage: Message) => void
 }
 
 export const ChatMessage: FC<Props> = memo(({ message, messageIndex, onEdit }) => {
