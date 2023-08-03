@@ -27,14 +27,13 @@ export interface Props {
   message: Message;
   messageIndex: number;
   onEdit?: (editedMessage: Message) => void,
-  chatId: string,
 }
 
-export const ChatMessage: FC<Props> = memo(({ message, messageIndex, onEdit, chatId }) => {
+export const ChatMessage: FC<Props> = memo(({ message, messageIndex, onEdit }) => {
   const { t } = useTranslation('chat');
 
   const {
-    state: { selectedConversation, conversations, currentMessage, messageIsStreaming },
+    state: { selectedConversation, conversations, currentMessage, messageIsStreaming, chatId },
     dispatch: homeDispatch,
   } = useContext(HomeContext);
 

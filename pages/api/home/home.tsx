@@ -93,9 +93,9 @@ const Home = ({
   //   { enabled: true, refetchOnMount: false },
   // );
 
-  // useEffect(() => {
-  //   if (data) dispatch({ field: 'models', value: data });
-  // }, [data, dispatch]);
+  useEffect(() => {
+    if (chatId) dispatch({ field: 'chatId', value: chatId });
+  }, []);
 
   const { data, error, refetch } = useQuery(
     ['GetApps', apiKey, serverSideApiKeyIsSet],
@@ -406,7 +406,7 @@ const Home = ({
             {/* <Chatbar /> */}
 
             <div className="flex flex-1">
-              <Chat stopConversationRef={stopConversationRef} chatId={chatId}/>
+              <Chat stopConversationRef={stopConversationRef}/>
             </div>
 
             {/* <Promptbar /> */}

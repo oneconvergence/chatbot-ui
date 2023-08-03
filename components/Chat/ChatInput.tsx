@@ -41,7 +41,6 @@ interface Props {
   stopConversationRef: MutableRefObject<boolean>;
   textareaRef: MutableRefObject<HTMLTextAreaElement | null>;
   showScrollDownButton: boolean;
-  chatId:string,
 }
 
 export const ChatInput = ({
@@ -51,12 +50,11 @@ export const ChatInput = ({
   stopConversationRef,
   textareaRef,
   showScrollDownButton,
-  chatId,
 }: Props) => {
   const { t } = useTranslation('chat');
 
   const {
-    state: { selectedConversation, messageIsStreaming, prompts },
+    state: { selectedConversation, messageIsStreaming, prompts, chatId },
 
     dispatch: homeDispatch,
   } = useContext(HomeContext);

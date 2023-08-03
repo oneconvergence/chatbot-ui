@@ -27,6 +27,7 @@ export interface HomeInitialState {
   defaultModelId: OpenAIModelID | undefined;
   serverSideApiKeyIsSet: boolean;
   serverSidePluginKeysSet: boolean;
+  chatId: string,
 }
 
 export const initialState: HomeInitialState = {
@@ -43,12 +44,13 @@ export const initialState: HomeInitialState = {
   currentMessage: undefined,
   prompts: [],
   temperature: 1,
-  showPromptbar: true,
-  showChatbar: true,
+  showPromptbar: false,
+  showChatbar: false,
   currentFolder: undefined,
   messageError: false,
   searchTerm: '',
   defaultModelId: undefined,
-  serverSideApiKeyIsSet: false,
+  serverSideApiKeyIsSet: true,
   serverSidePluginKeysSet: false,
+  chatId:'',
 };

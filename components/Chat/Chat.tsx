@@ -40,10 +40,9 @@ import {onAddModelForComparison, onRemoveModelFromComparison, getEndpoint}  from
 
 interface Props {
   stopConversationRef: MutableRefObject<boolean>;
-  chatId: string;
 }
 
-export const Chat = memo(({ stopConversationRef, chatId }: Props) => {
+export const Chat = memo(({ stopConversationRef }: Props) => {
   const { t } = useTranslation('chat');
   const { updateSyncChatSubmit } =  useMultiChatContext();
 
@@ -59,6 +58,7 @@ export const Chat = memo(({ stopConversationRef, chatId }: Props) => {
       modelError,
       loading,
       prompts,
+      chatId
     },
     handleUpdateConversation,
     dispatch: homeDispatch,
@@ -523,7 +523,6 @@ export const Chat = memo(({ stopConversationRef, chatId }: Props) => {
                         selectedConversation?.messages.length - index,
                       );
                     }}
-                    chatId={chatId}
                   />
                 ))}
 
@@ -551,7 +550,6 @@ export const Chat = memo(({ stopConversationRef, chatId }: Props) => {
               }
             }}
             showScrollDownButton={showScrollDownButton}
-            chatId={chatId}
           />
         </>
       )}
