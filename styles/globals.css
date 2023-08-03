@@ -30,6 +30,7 @@
 
 html {
   background: #202123;
+  font-family: ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,Segoe UI,Roboto,Helvetica Neue,Arial,Noto Sans,sans-serif,Apple Color Emoji,Segoe UI Emoji,Segoe UI Symbol,Noto Color Emoji;
 }
 
 @media (max-width: 720px) {
@@ -41,3 +42,5 @@ html {
 pre:has(div.codeblock) {
   padding: 0;
 }
+
+

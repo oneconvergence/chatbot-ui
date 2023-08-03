@@ -7,7 +7,7 @@ const useD3xApiService = () => {
 
   const getApps = useCallback(
     (signal?: AbortSignal) => {
-      return fetchService.get(`/api/ds/apps/`, {
+      return fetchService.get(`http://127.0.0.1:8081/api/ds/apps/`, {
         headers: {
           'Content-Type': 'application/json',
         },

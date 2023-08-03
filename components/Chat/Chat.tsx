@@ -37,6 +37,7 @@ import { MemoizedChatMessage } from './MemoizedChatMessage';
 
 import { useMultiChatContext } from '@/pages/api/home/multiChat';
 import {onAddModelForComparison, onRemoveModelFromComparison, getEndpoint}  from '@/pages/api/home/utils';
+import ClearConfirmation from './ClearConfirmation';
 
 interface Props {
   stopConversationRef: MutableRefObject<boolean>;
@@ -67,8 +68,8 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
   const [currentMessage, setCurrentMessage] = useState<Message>();
   const [autoScrollEnabled, setAutoScrollEnabled] = useState<boolean>(true);
   const [showSettings, setShowSettings] = useState<boolean>(false);
-  const [showScrollDownButton, setShowScrollDownButton] =
-    useState<boolean>(false);
+  const [showScrollDownButton, setShowScrollDownButton] = useState<boolean>(false);
+  const [showConfirmation, setShowConfirmation] = useState<boolean>(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const chatContainerRef = useRef<HTMLDivElement>(null);
@@ -295,9 +296,20 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
     setShowSettings(!showSettings);
   };
 
+  const handleClear = () => {
+    setShowConfirmation(true);
+  };
+
+  const handleConfirm = () => {
+    onClearAll();
+  };
+
+  const handleCancel = () => {
+    setShowConfirmation(false); 
+  };
+
   const onClearAll = () => {
     if (
-      confirm(t<string>('Are you sure you want to clear all messages?')) &&
       selectedConversation
     ) {
       handleUpdateConversation(selectedConversation, {
@@ -305,6 +317,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
         value: [],
       });
     }
+    setShowConfirmation(false); 
   };
 
   const scrollDown = () => {
@@ -456,13 +469,13 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                   <div className='flex  ml-auto'>
                   <div className="group relative  flex justify-center">
                   <button
-                    className="ml-2 cursor-pointer hover:opacity-50 disabled:opacity-50"
-                    onClick={onClearAll}
+                    className="ml-2 cursor-pointer hover:opacity-50 disabled:cursor-not-allowed"
+                    onClick={handleClear} 
                     disabled={selectedConversation?.messages.length === 0}
                   >
                     <IconClearAll size={18} />
                   </button>
-                  <span className="absolute top-10 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap overflow-visible">Clear conversation</span>
+                  <span className="absolute top-10 left--1 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap overflow-visible">Clear conversation</span>
                  </div>
                  <div className="group relative  flex justify-center">
                   <button
@@ -471,7 +484,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                   >
                     <IconCircleMinus size={18} />
                   </button>
-                  <span className="absolute top-10 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap">Remove model</span>
+                  <span className="absolute top-10 left--1 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap">Remove model</span>
                  </div>
                  <div className="group relative  flex justify-center"> 
                   <button
@@ -480,20 +493,23 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                   >
                     <IconCirclePlus size={18} />
                   </button>
-                  <span className="absolute top-10 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap">Add model for comparison</span>
+                  <span className="absolute top-10 right-0 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap">Add model for comparison</span>
                  </div>
 
                  <div className="group relative  flex justify-center">
                   <button
                     className="ml-2 cursor-pointer hover:opacity-50"
-                    onClick={handleSettings}
+                    onClick={handleSettings} 
                   >
                     <IconSettings size={18} />
                   </button>
-                  <span className="absolute top-10 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap">Configure model</span>
+                  <span className="absolute top-10 right-0 z-1 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap">Configure model</span>
                  </div>
                   </div>
                 </div>
+                {showConfirmation && (
+        <ClearConfirmation onConfirm={handleConfirm} onCancel={handleCancel} />
+          )}
                 {showSettings && (
                   <div className="flex flex-col space-y-10 md:mx-auto md:max-w-xl md:gap-6 md:py-3 md:pt-6 lg:max-w-2xl lg:px-0 xl:max-w-3xl">
                     <div className="flex h-full flex-col space-y-4 border-b border-neutral-200 p-4 dark:border-neutral-600 md:rounded-lg md:border">
