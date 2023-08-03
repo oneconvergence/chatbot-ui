@@ -78,21 +78,6 @@ const Home = ({
 
   const stopConversationRef = useRef<boolean>(false);
 
-  // const { data, error, refetch } = useQuery(
-  //   ['GetModels', apiKey, serverSideApiKeyIsSet],
-  //   ({ signal }) => {
-  //     if (!apiKey && !serverSideApiKeyIsSet) return null;
-
-  //     return getModels(
-  //       {
-  //         key: apiKey,
-  //       },
-  //       signal,
-  //     );
-  //   },
-  //   { enabled: true, refetchOnMount: false },
-  // );
-
   useEffect(() => {
     if (chatId) dispatch({ field: 'chatId', value: chatId });
   }, []);
