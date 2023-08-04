@@ -294,10 +294,12 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
 
   const handleSettings = () => {
     setShowSettings(!showSettings);
+    setShowConfirmation(false);
   };
 
   const handleClear = () => {
-    setShowConfirmation(true);
+    setShowConfirmation(!showConfirmation);
+    setShowSettings(false);
   };
 
   const handleConfirm = () => {
@@ -461,9 +463,10 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
               <>
                 <div className="sticky top-0 z-10 flex  border-b-1 border-b-neutral-300 bg-neutral-100 p-2 text-sm text-neutral-500 dark:border-none dark:bg-[#444654] dark:text-neutral-200 bg-white shadow-[0_1px_rgba(202,206,214,.3),0_5px_10px_-5px_rgba(0,0,0,.05)]">
                 <div className='flex'><ModelSelect />
-                <p className="my-auto ml-1">
+                {/* <p className="my-auto ml-1">
                 {t('Temp')}
-                  : {selectedConversation?.temperature} </p></div>
+                  : {selectedConversation?.temperature} </p> */}
+                  </div>
                   {/* {t('Model')}: {selectedConversation?.model.name} | {t('Temp')}
                   : {selectedConversation?.temperature} | */}
                   <div className='flex  ml-auto'>
@@ -509,11 +512,8 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                 </div>
                 {showConfirmation && (
         <ClearConfirmation onConfirm={handleConfirm} onCancel={handleCancel} />
-          )}
-                {showSettings && (
-                  <div className="flex flex-col space-y-10 md:mx-auto md:max-w-xl md:gap-6 md:py-3 md:pt-6 lg:max-w-2xl lg:px-0 xl:max-w-3xl">
-                    <div className="flex h-full flex-col space-y-4 border-b border-neutral-200 p-4 dark:border-neutral-600 md:rounded-lg md:border">
-                    <TemperatureSlider
+                )}
+                {showSettings && ( <TemperatureSlider
                         label={t('Temperature')}
                         onChangeTemperature={(temperature) =>
                           handleUpdateConversation(selectedConversation!, {
@@ -522,8 +522,6 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                           })
                         }
                       />
-                    </div>
-                  </div>
                 )}
 
                 {selectedConversation?.messages.map((message, index) => (

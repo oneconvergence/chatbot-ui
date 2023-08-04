@@ -39,30 +39,41 @@ export const TemperatureSlider: FC<Props> = ({
 
   return (
     <div className="relative">
-      <div className="absolute top-13 right-0 z-50 p-4 rounded bg-white shadow-custom border transition-all w-max-content h-max-content">
+      <div className="absolute right-0 z-50 p-4 rounded bg-white shadow-custom border transition-all w-max-content h-max-content">
       <div className="grid grid-cols-2 gap-2 items-center">
-          <div>
-            <label className="inline-flex items-center text-sm font-medium text-zinc-700">{label}</label>
-            <button
-            className="absolute ml-1 text-sm text-gray-500  dark:text-white rounded-full focus:outline-none"
-            onClick={handleinfo}
-          >
-            <IconInfoCircle size={18}/>
-          </button>
+          <div className='inline-flex items-center'>
+            <label className=" text-sm font-medium text-zinc-700">{label}</label>
+            <div className="group">
+                  <button
+                    className="ml-1 mt-2 text-sm text-gray-500  dark:text-white rounded-full focus:outline-none">
+                    <IconInfoCircle size={18}/>
+                  </button>
+                  <span className="absolute right-10 bottom-1 z-10 scale-0 transition-all border p-2 group-hover:scale-100 whitespace-nowrap text-sm text-zinc-700 rounded bg-white border shadow transition-all w-max-content h-max-content">Lower value gives less random text</span>
+                 </div>
           </div>
-          <span className="text-right text-sm text-neutral-900 dark:text-neutral-100">
-            {temperature.toFixed(1)}
-          </span>
-        </div>
-        <div className="flex items-center mt-2">
           <input
-            className="flex-grow cursor-pointer"
+            id="maximumLength"
+            className="absolute right-3 py-0 px-1 text-left border border-transparent w-[64px] font-medium text-zinc-700 text-sm tracking-tight rounded focus:outline-none focus:ring-0 hover:border-zinc-200 focus:border-zinc-400 font-mono"
+            min={0}
+            max={1}
+            step={0.1}
+            type="number"
+            value={temperature}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="flex items-center mt-1">
+          <input
+            className="flex-grow cursor-pointer appearance-none w-full h-1 rounded-md focus:outline-none ring ring-gray-300 ring-1"
             type="range"
             min={0}
             max={1}
             step={0.1}
             value={temperature}
-            onChange={handleChange}
+            onChange={(event) => handleChange(event)}
+            style={{
+              background: `linear-gradient(to right, black 0%, black ${temperature * 100}%, #D1D5DB ${temperature * 100}%, #D1D5DB 100%)`,
+            }}
           />
         </div>
       </div>
