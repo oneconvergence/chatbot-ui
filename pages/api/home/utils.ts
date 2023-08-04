@@ -42,6 +42,7 @@ export const onRemoveModelFromComparison = (chatId:string) => {
 }
 
 export const getEndpoint = (model: OpenAIModel) => {
+  return "/chatbotui/api/chat"
   if (!model || !model.app) {
     return 'api/chat';
   }

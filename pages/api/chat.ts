@@ -1,5 +1,6 @@
 import { DEFAULT_SYSTEM_PROMPT, DEFAULT_TEMPERATURE } from '@/utils/app/const';
-import { OpenAIError, OpenAIStream } from '@/utils/server';
+import { OpenAIError } from '@/utils/server';
+import { OpenAIStream } from '@/utils/server/gptfu';
 
 import { ChatBody, Message } from '@/types/chat';
 

@@ -17,8 +17,21 @@ const useD3xApiService = () => {
     [fetchService],
   );
 
+  const getModels = useCallback(
+    (signal?: AbortSignal) => {
+      return fetchService.get(`/chatbotui/api/gptfu/models`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        signal,
+      });
+    },
+    [fetchService],
+  );
+
   return {
     getApps,
+    getModels
   };
 };
 

@@ -55,7 +55,7 @@ const Home = ({
   chatId
 }: Props) => {
   const { t } = useTranslation('chat');
-  const { getApps } = useApiService();
+  const { getModels } = useApiService();
   const { getModelsError } = useErrorService();
   const [initialRender, setInitialRender] = useState<boolean>(true);
 
@@ -83,21 +83,22 @@ const Home = ({
   }, []);
 
   const { data, error, refetch } = useQuery(
-    ['GetApps', apiKey, serverSideApiKeyIsSet],
+    ['GetModels', apiKey, serverSideApiKeyIsSet],
     ({ signal }) => {
       if (!apiKey && !serverSideApiKeyIsSet) return null;
-      return getApps(signal)
+      return getModels(signal)
     },
-    { enabled: true, refetchOnMount: false },
+    { enabled: true, refetchOnMount: false, refetchOnWindowFocus: false },
   );
 
   useEffect(() => {
     if (data && Array.isArray(data)) {
-      const models = data.map((app) => ({
-        id: defaultModelId,
-        name: app.name,
-        app: app.name,
-      }))
+      const models = data
+      // .map((app) => ({
+      //   id: defaultModelId,
+      //   name: app.name,
+      //   app: app.name,
+      // }))
       dispatch({ field: 'models', value: models });
     }
   }, [data, dispatch]);
@@ -404,13 +405,7 @@ const Home = ({
 export default Home;
 
 export const getServerSideProps: GetServerSideProps = async ({ locale }) => {
-  const defaultModelId =
-    (process.env.DEFAULT_MODEL &&
-      Object.values(OpenAIModelID).includes(
-        process.env.DEFAULT_MODEL as OpenAIModelID,
-      ) &&
-      process.env.DEFAULT_MODEL) ||
-    fallbackModelID;
+  const defaultModelId = process.env.DEFAULT_MODEL ;
 
   let serverSidePluginKeysSet = false;
 
