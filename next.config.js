@@ -13,6 +13,16 @@ const nextConfig = {
 
     return config;
   },
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'http',
+        hostname: 'p2.gptfu.com',
+        port: '',
+        pathname: '/api/**',
+      },
+    ],
+  },
 };
 
 module.exports = nextConfig;

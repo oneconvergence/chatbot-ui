@@ -9,6 +9,7 @@ import {
 import { FC, memo, useContext, useEffect, useRef, useState } from 'react';
 
 import { useTranslation } from 'next-i18next';
+import Image from 'next/image';
 
 import { updateConversation } from '@/utils/app/conversation';
 
@@ -41,7 +42,6 @@ export const ChatMessage: FC<Props> = memo(({ message, messageIndex, onEdit }) =
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [messageContent, setMessageContent] = useState(message.content);
   const [messagedCopied, setMessageCopied] = useState(false);
-
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   const toggleEditing = () => {
@@ -210,6 +210,7 @@ export const ChatMessage: FC<Props> = memo(({ message, messageIndex, onEdit }) =
             </div>
           ) : (
             <div className="flex flex-row">
+              {selectedConversation?.model?.input_output_type === 'text_to_text' &&
               <MemoizedReactMarkdown
                 className="prose dark:prose-invert flex-1"
                 remarkPlugins={[remarkGfm, remarkMath]}
@@ -265,8 +266,13 @@ export const ChatMessage: FC<Props> = memo(({ message, messageIndex, onEdit }) =
                 {`${message.content}${
                   messageIsStreaming && messageIndex == (selectedConversation?.messages.length ?? 0) - 1 ? '`▍`' : ''
                 }`}
-              </MemoizedReactMarkdown>
-
+              </MemoizedReactMarkdown>}
+              {selectedConversation?.model?.input_output_type === 'text_to_image' && <Image
+                src={`http://p2.gptfu.com:3001/api/media/${message.content}`}
+                alt="AI"
+                width={200}
+                height={200}
+              />}
               <div className="md:-mr-4 ml-1 md:ml-0 flex flex-col md:flex-row gap-4 md:gap-1 items-center md:items-start justify-end md:justify-start">
                 {messagedCopied ? (
                   <IconCheck

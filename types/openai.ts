@@ -6,6 +6,7 @@ export interface OpenAIModel {
   maxLength: number; // maximum length of a message
   tokenLimit: number;
   app: string;
+  input_output_type: string,
 }
 
 export enum OpenAIModelID {
@@ -25,6 +26,7 @@ export const OpenAIModels: Record<OpenAIModelID, OpenAIModel> = {
     maxLength: 12000,
     tokenLimit: 4000,
     app: '',
+    input_output_type:'',
   },
   [OpenAIModelID.GPT_3_5_AZ]: {
     id: OpenAIModelID.GPT_3_5_AZ,
@@ -32,6 +34,7 @@ export const OpenAIModels: Record<OpenAIModelID, OpenAIModel> = {
     maxLength: 12000,
     tokenLimit: 4000,
     app: '',
+    input_output_type:'',
   },
   [OpenAIModelID.GPT_4]: {
     id: OpenAIModelID.GPT_4,
@@ -39,6 +42,7 @@ export const OpenAIModels: Record<OpenAIModelID, OpenAIModel> = {
     maxLength: 24000,
     tokenLimit: 8000,
     app: '',
+    input_output_type:'',
   },
   [OpenAIModelID.GPT_4_32K]: {
     id: OpenAIModelID.GPT_4_32K,
@@ -46,5 +50,6 @@ export const OpenAIModels: Record<OpenAIModelID, OpenAIModel> = {
     maxLength: 96000,
     tokenLimit: 32000,
     app: '',
+    input_output_type:'',
   },
 };
