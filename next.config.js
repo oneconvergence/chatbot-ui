@@ -18,7 +18,7 @@ const nextConfig = {
       {
         protocol: 'http',
         hostname: 'p2.gptfu.com',
-        port: '',
+        port: '3001',
         pathname: '/api/**',
       },
     ],

@@ -119,7 +119,7 @@ export const ChatInput = ({
       return;
     }
     if(syncChat)updateSyncChatSubmit(true)
-    onSend({ role: 'user', content }, plugin);
+    onSend({ role: 'user', content, input_output_type: selectedConversation?.model?.input_output_type||'text_to_text' }, plugin);
     setContent('');
     setPlugin(null);
 
