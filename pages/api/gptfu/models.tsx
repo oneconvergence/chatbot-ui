@@ -5,7 +5,7 @@ export const config = {
 
 const handler = async (req: Request): Promise<Response> => {
   try {
-    const url = 'https://p2.gptfu.com/api/models-enabled'
+    const url = 'http://p2.gptfu.com:3001/api/models-enabled'
     const response = await fetch(url, {
       headers: {
         'Content-Type': 'application/json',

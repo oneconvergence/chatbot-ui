@@ -30,7 +30,7 @@ export const OpenAIStream = async (
   key: string,
   messages: Message[],
 ) => {
-  let url = 'https://p2.gptfu.com/api/inference/text/stream/single';
+  let url = 'http://p2.gptfu.com:3001/api/inference/text/stream/single';
   const res = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
