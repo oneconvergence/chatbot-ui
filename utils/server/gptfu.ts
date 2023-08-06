@@ -71,6 +71,9 @@ export const OpenAIStream = async (
               controller.close();
               return;
             }
+            if (json.message === '[INITIALIZING]') {
+              return;
+            }
             const text = json.message;
             const queue = encoder.encode(text);
             controller.enqueue(queue);
