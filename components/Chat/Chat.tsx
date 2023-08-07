@@ -448,10 +448,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
             ) : (
               <>
                 <div className="sticky top-0 z-10 flex  border-b-1 border-b-neutral-300 bg-neutral-100 p-2 text-sm text-neutral-500 dark:border-none dark:bg-[#444654] dark:text-neutral-200 bg-white shadow-[0_1px_rgba(202,206,214,.3),0_5px_10px_-5px_rgba(0,0,0,.05)]">
-                <div className='flex'><ModelSelect />
-                <p className="my-auto ml-1">
-                {t('Temp')}
-                  : {selectedConversation?.temperature} </p></div>
+                <div className='flex'><ModelSelect /></div>
                   {/* {t('Model')}: {selectedConversation?.model.name} | {t('Temp')}
                   : {selectedConversation?.temperature} | */}
                   <div className='flex  ml-auto'>
