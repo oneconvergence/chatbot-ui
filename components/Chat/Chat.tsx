@@ -463,7 +463,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                   >
                     <IconClearAll size={18} />
                   </button>
-                  <span className="absolute top-10 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap overflow-visible">Clear conversation</span>
+                  <span className="absolute top-10 right-0 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap overflow-visible">Clear conversation</span>
                  </div>
                  <div className="group relative  flex justify-center">
                   <button
@@ -472,7 +472,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                   >
                     <IconCircleMinus size={18} />
                   </button>
-                  <span className="absolute top-10 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap">Remove model</span>
+                  <span className="absolute top-10 right-0 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap overflow-visible">Remove model</span>
                  </div>
                  <div className="group relative  flex justify-center"> 
                   <button
@@ -481,7 +481,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                   >
                     <IconCirclePlus size={18} />
                   </button>
-                  <span className="absolute top-10 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap">Add model for comparison</span>
+                  <span className="absolute top-10 right-0 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap overflow-visible">Add model for comparison</span>
                  </div>
 
                  <div className="group relative  flex justify-center">
@@ -491,7 +491,7 @@ export const Chat = memo(({ stopConversationRef }: Props) => {
                   >
                     <IconSettings size={18} />
                   </button>
-                  <span className="absolute top-10 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap">Configure model</span>
+                  <span className="absolute top-10 right-0 scale-0 transition-all border p-2 group-hover:scale-100 bg-white whitespace-nowrap ">Configure model</span>
                  </div>
                   </div>
                 </div>
